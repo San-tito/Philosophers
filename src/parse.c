@@ -6,7 +6,7 @@
 /*   By: sguzman <sguzman@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 15:02:14 by sguzman           #+#    #+#             */
-/*   Updated: 2024/05/21 23:48:57 by sguzman          ###   ########.fr       */
+/*   Updated: 2024/05/22 01:29:56 by sguzman          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,11 +29,12 @@ ssize_t	ft_strtoi(const char *s, char **endptr)
 
 	while (ft_isspace(*s))
 		s++;
-	acc = neg = 0;
+	neg = 0;
 	if (*s == '-')
 		neg = 1;
 	if (*s == '-' || *s == '+')
 		s++;
+	acc = 0;
 	while (ft_isdigit(*s))
 	{
 		if (neg && (acc < (INT_MIN + (*s - '0')) / 10))
@@ -41,10 +42,9 @@ ssize_t	ft_strtoi(const char *s, char **endptr)
 		if (neg == 0 && (acc > (INT_MAX - (*s - '0')) / 10))
 			return (errno = ERANGE, acc = INT_MAX);
 		if (neg)
-			acc = acc * 10 - (*s - '0');
+			acc = acc * 10 - (*s++ - '0');
 		else
-			acc = acc * 10 + (*s - '0');
-		s++;
+			acc = acc * 10 + (*s++ - '0');
 	}
 	if (endptr != 0)
 		*endptr = (char *)s;
