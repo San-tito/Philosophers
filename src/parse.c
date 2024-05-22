@@ -6,7 +6,7 @@
 /*   By: sguzman <sguzman@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 15:02:14 by sguzman           #+#    #+#             */
-/*   Updated: 2024/05/22 02:02:47 by sguzman          ###   ########.fr       */
+/*   Updated: 2024/05/22 12:55:09 by sguzman          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,4 +75,30 @@ int	legal_number(const char *string, int *result)
 		return (1);
 	}
 	return (0);
+}
+
+t_params	parse_arguments(int argc, char **argv)
+{
+	t_params	params;
+
+	if (argc < 5 || argc > 6)
+		parser_error("invalid number of arguments", NULL);
+	if (legal_number(*(argv + 1), &params.num_philos) == 0
+		|| params.num_philos <= 0)
+		parser_error("invalid num_philos: %s", *(argv + 1));
+	if (legal_number(*(argv + 2), &params.time_die) == 0
+		|| params.time_die <= 0)
+		parser_error("invalid time_die: %s", *(argv + 2));
+	if (legal_number(*(argv + 3), &params.time_eat) == 0
+		|| params.time_eat <= 0)
+		parser_error("invalid time_eat: %s", *(argv + 3));
+	if (legal_number(*(argv + 4), &params.time_sleep) == 0
+		|| params.time_sleep <= 0)
+		parser_error("invalid time_sleep: %s", *(argv + 4));
+	if (argc == 6 && (legal_number(*(argv + 5), &params.num_must_eat) == 0
+			|| params.num_must_eat <= 0))
+		parser_error("invalid num_must_eat: %s", *(argv + 5));
+	else
+		params.num_must_eat = -1;
+	return (params);
 }
