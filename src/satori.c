@@ -1,36 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   error.c                                            :+:      :+:    :+:   */
+/*   satori.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sguzman <sguzman@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/22 12:10:09 by sguzman           #+#    #+#             */
-/*   Updated: 2024/05/27 14:54:56 by sguzman          ###   ########.fr       */
+/*   Created: 2024/05/27 17:26:21 by sguzman           #+#    #+#             */
+/*   Updated: 2024/05/27 17:30:29 by sguzman          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-void	parser_error(const char *format, const char *arg)
+void	*philosopher(void *arg)
 {
-	const char	*ename = PROGRAM;
+	t_philo	*philo;
 
-	printf("%s: ", ename);
-	if (arg != 0)
-		printf(format, arg);
-	else
-		printf("%s", format);
-	printf("\n");
-	exit(2);
-}
-
-void	fatal_error(const char *format, unsigned long arg)
-{
-	const char	*ename = PROGRAM;
-
-	printf("%s: ", ename);
-	printf(format, arg);
-	printf("\n");
-	exit(2);
+	philo = (t_philo *)arg;
+	while (42)
+	{
+		printf("%d is thinking\n", philo->id);
+		usleep(1000 * (philo->id + 1));
+		printf("%d is hungry\n", philo->id);
+		printf("%d is eating\n", philo->id);
+		usleep(1000 * (philo->id + 1));
+		printf("%d is sleeping\n", philo->id);
+		usleep(1000 * (philo->id + 1));
+	}
+	return (0);
 }
