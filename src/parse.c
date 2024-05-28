@@ -6,7 +6,7 @@
 /*   By: sguzman <sguzman@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 15:02:14 by sguzman           #+#    #+#             */
-/*   Updated: 2024/05/27 14:16:57 by sguzman          ###   ########.fr       */
+/*   Updated: 2024/05/28 12:29:49 by sguzman          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ t_params	parse_arguments(int argc, char **argv)
 	t_params	params;
 
 	if (argc < 5 || argc > 6)
-		parser_error("invalid number of arguments", NULL);
+		internal_error("invalid number of arguments");
 	if (legal_number(*(argv + 1), &params.num_philos) == 0
 		|| params.num_philos <= 0)
 		parser_error("invalid number of philosophers: %s", *(argv + 1));
