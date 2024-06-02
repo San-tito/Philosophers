@@ -6,7 +6,7 @@
 #    By: sguzman <sguzman@student.42barcelona.com>  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/05/21 14:46:46 by sguzman           #+#    #+#              #
-#    Updated: 2024/06/02 23:15:38 by sguzman          ###   ########.fr        #
+#    Updated: 2024/06/02 23:57:04 by sguzman          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -31,7 +31,7 @@ INCLUDE_PATH	= ./include
 
 HEADER		= $(INCLUDE_PATH)/philo.h
 
-SRCS 		= error.c parse.c routine.c xmalloc.c
+SRCS 		= error.c parse.c routine.c time.c xmalloc.c
 
 MAIN 		= philo.c
 

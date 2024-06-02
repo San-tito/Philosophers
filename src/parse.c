@@ -6,7 +6,7 @@
 /*   By: sguzman <sguzman@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 15:02:14 by sguzman           #+#    #+#             */
-/*   Updated: 2024/06/02 22:38:04 by sguzman          ###   ########.fr       */
+/*   Updated: 2024/06/03 00:01:23 by sguzman          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,18 +79,16 @@ static int	legal_number(const char *string, int *result)
 
 t_table	parse_arguments(int argc, char **argv)
 {
-	t_table table;
+	t_table	table;
 
 	if (argc < 5 || argc > 6)
 		internal_error("invalid number of arguments");
 	if (legal_number(*(argv + 1), &table.num_philos) == 0
 		|| table.num_philos <= 0)
 		parser_error("invalid number of philosophers: %s", *(argv + 1));
-	if (legal_number(*(argv + 2), &table.time_die) == 0
-		|| table.time_die <= 0)
+	if (legal_number(*(argv + 2), &table.time_die) == 0 || table.time_die <= 0)
 		parser_error("invalid time to die: %s", *(argv + 2));
-	if (legal_number(*(argv + 3), &table.time_eat) == 0
-		|| table.time_eat <= 0)
+	if (legal_number(*(argv + 3), &table.time_eat) == 0 || table.time_eat <= 0)
 		parser_error("invalid time to eat: %s", *(argv + 3));
 	if (legal_number(*(argv + 4), &table.time_sleep) == 0
 		|| table.time_sleep <= 0)
@@ -101,5 +99,6 @@ t_table	parse_arguments(int argc, char **argv)
 			*(argv + 5));
 	else
 		table.num_must_eat = -1;
+	table.start_time = get_current_time_ms();
 	return (table);
 }

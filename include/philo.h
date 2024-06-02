@@ -6,7 +6,7 @@
 /*   By: sguzman <sguzman@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 14:53:59 by sguzman           #+#    #+#             */
-/*   Updated: 2024/06/02 22:33:52 by sguzman          ###   ########.fr       */
+/*   Updated: 2024/06/03 00:00:13 by sguzman          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,9 +24,17 @@
 
 # define PROGRAM "philo"
 
+/* ************************************************************************** */
+/*                              Thread and Mutex Types                        */
+/* ************************************************************************** */
+
 typedef pthread_t		t_thread;
 typedef pthread_mutex_t	t_fork;
 typedef pthread_mutex_t	t_micro;
+
+/* ************************************************************************** */
+/*                              Table Structure                               */
+/* ************************************************************************** */
 
 typedef struct s_table
 {
@@ -39,6 +47,10 @@ typedef struct s_table
 	t_micro				micro;
 }						t_table;
 
+/* ************************************************************************** */
+/*                            Philosopher Structure                           */
+/* ************************************************************************** */
+
 typedef struct s_philo
 {
 	int32_t				id;
@@ -48,17 +60,42 @@ typedef struct s_philo
 	t_fork				*right_fork;
 }						t_philo;
 
+/* ************************************************************************** */
+/*                               Time-related Functions                      */
+/* ************************************************************************** */
+
+int64_t					get_current_time_ms(void);
+
+void					sleep_ms(int64_t milliseconds);
+
+/* ************************************************************************** */
+/*                              Parse Functions                               */
+/* ************************************************************************** */
+
 t_table					parse_arguments(int argc, char **argv);
+
+/* ************************************************************************** */
+/*                             Error Handling                                 */
+/* ************************************************************************** */
+
 void					parser_error(const char *format, const char *arg);
 
-void					xfree(void *string);
-void					*xmalloc(size_t bytes);
 void					fatal_error(const char *format, unsigned long arg);
 
-void					*philosopher(void *arg);
 void					internal_error(const char *format);
 
-size_t					get_current_time(void);
-void					log_state(const t_philo *philosopher);
+/* ************************************************************************** */
+/*                           Memory Allocation                                */
+/* ************************************************************************** */
+
+void					xfree(void *string);
+
+void					*xmalloc(size_t bytes);
+
+/* ************************************************************************** */
+/*                           Philosopher Thread Routine                       */
+/* ************************************************************************** */
+
+void					*philosopher(void *arg);
 
 #endif
