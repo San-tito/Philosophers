@@ -6,7 +6,7 @@
 /*   By: sguzman <sguzman@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 14:53:59 by sguzman           #+#    #+#             */
-/*   Updated: 2024/05/28 13:41:07 by sguzman          ###   ########.fr       */
+/*   Updated: 2024/06/02 22:33:52 by sguzman          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,38 +24,31 @@
 
 # define PROGRAM "philo"
 
-typedef enum e_state
-{
-	FORK_TAKEN,
-	EATING,
-	SLEEPING,
-	THINKING,
-	DEAD
-}						t_state;
-
-typedef struct s_params
-{
-	int					num_philos;
-	int					time_die;
-	int					time_eat;
-	int					time_sleep;
-	int					num_must_eat;
-}						t_params;
-
+typedef pthread_t		t_thread;
 typedef pthread_mutex_t	t_fork;
+typedef pthread_mutex_t	t_micro;
+
+typedef struct s_table
+{
+	int32_t				num_philos;
+	int32_t				time_die;
+	int32_t				time_eat;
+	int32_t				time_sleep;
+	int32_t				num_must_eat;
+	int64_t				start_time;
+	t_micro				micro;
+}						t_table;
 
 typedef struct s_philo
 {
-	int					id;
-	t_state				state;
-	pthread_t			thread;
-	t_params			params;
+	int32_t				id;
+	t_thread			thread;
+	t_table				*table;
 	t_fork				*left_fork;
 	t_fork				*right_fork;
 }						t_philo;
 
-int						legal_number(const char *string, int *result);
-t_params				parse_arguments(int argc, char **argv);
+t_table					parse_arguments(int argc, char **argv);
 void					parser_error(const char *format, const char *arg);
 
 void					xfree(void *string);

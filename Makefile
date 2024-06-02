@@ -6,7 +6,7 @@
 #    By: sguzman <sguzman@student.42barcelona.com>  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/05/21 14:46:46 by sguzman           #+#    #+#              #
-#    Updated: 2024/05/28 13:28:14 by sguzman          ###   ########.fr        #
+#    Updated: 2024/06/02 23:15:38 by sguzman          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,7 +16,7 @@
 
 NAME		= philo 
 CC 		= cc
-CFLAGS		= -Wall -Wextra -Werror -g
+CFLAGS		= -Wall -Wextra -Werror -fsanitize=thread
 DFLAGS		= -MMD -MF $(@:.o=.d)
 
 ################################################################################
@@ -31,7 +31,7 @@ INCLUDE_PATH	= ./include
 
 HEADER		= $(INCLUDE_PATH)/philo.h
 
-SRCS 		= error.c log.c parse.c satori.c xmalloc.c
+SRCS 		= error.c parse.c routine.c xmalloc.c
 
 MAIN 		= philo.c
 
