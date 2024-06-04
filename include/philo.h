@@ -6,7 +6,7 @@
 /*   By: sguzman <sguzman@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 14:53:59 by sguzman           #+#    #+#             */
-/*   Updated: 2024/06/03 00:00:13 by sguzman          ###   ########.fr       */
+/*   Updated: 2024/06/03 15:20:09 by sguzman          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,9 +64,9 @@ typedef struct s_philo
 /*                               Time-related Functions                      */
 /* ************************************************************************** */
 
-int64_t					get_current_time_ms(void);
+int64_t					now(void);
 
-void					sleep_ms(int64_t milliseconds);
+void					ft_sleep(int64_t milliseconds);
 
 /* ************************************************************************** */
 /*                              Parse Functions                               */

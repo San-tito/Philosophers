@@ -6,7 +6,7 @@
 /*   By: sguzman <sguzman@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 14:55:55 by sguzman           #+#    #+#             */
-/*   Updated: 2024/06/03 00:01:54 by sguzman          ###   ########.fr       */
+/*   Updated: 2024/06/03 17:53:35 by sguzman          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,6 @@ void	gathering_of_sages(t_philo *philos)
 	{
 		if (pthread_join((*(philos + i)).thread, NULL) != 0)
 			fatal_error("Failed to join thread for philosopher %lu", i);
-		sleep_ms(100);
 		i++;
 	}
 }

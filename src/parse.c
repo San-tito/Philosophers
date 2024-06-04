@@ -6,7 +6,7 @@
 /*   By: sguzman <sguzman@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 15:02:14 by sguzman           #+#    #+#             */
-/*   Updated: 2024/06/03 00:01:23 by sguzman          ###   ########.fr       */
+/*   Updated: 2024/06/03 15:20:17 by sguzman          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,6 +99,6 @@ t_table	parse_arguments(int argc, char **argv)
 			*(argv + 5));
 	else
 		table.num_must_eat = -1;
-	table.start_time = get_current_time_ms();
+	table.start_time = now();
 	return (table);
 }
