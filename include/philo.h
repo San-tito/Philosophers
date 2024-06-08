@@ -6,7 +6,7 @@
 /*   By: sguzman <sguzman@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 14:53:59 by sguzman           #+#    #+#             */
-/*   Updated: 2024/06/03 15:20:09 by sguzman          ###   ########.fr       */
+/*   Updated: 2024/06/08 16:49:26 by sguzman          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,8 +56,8 @@ typedef struct s_philo
 	int32_t				id;
 	t_thread			thread;
 	t_table				*table;
-	t_fork				*left_fork;
-	t_fork				*right_fork;
+	t_fork				*first_fork;
+	t_fork				*second_fork;
 }						t_philo;
 
 /* ************************************************************************** */

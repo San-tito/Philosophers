@@ -6,7 +6,7 @@
 /*   By: sguzman <sguzman@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 14:55:55 by sguzman           #+#    #+#             */
-/*   Updated: 2024/06/03 17:53:35 by sguzman          ###   ########.fr       */
+/*   Updated: 2024/06/08 16:56:52 by sguzman          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,10 +27,13 @@ t_philo	*thinkers_assembly(t_table *table)
 		(*(philos + i)).id = i;
 		(*(philos + i)).table = table;
 		pthread_mutex_init(forks + i, NULL);
-		(*(philos + i)).left_fork = forks + i;
-		(*(philos + i)).right_fork = forks + ((i + 1) % num_philos);
+		(*(philos + i)).first_fork = forks + (i * (1 - (i & 1)) + ((i + 1)
+					% num_philos) * (i & 1));
+		(*(philos + i)).second_fork = forks + (((i + 1) % num_philos) * (1
+					- (i & 1)) + i * (i & 1));
 		i++;
 	}
+	pthread_mutex_init(&(*table).micro, NULL);
 	return (philos);
 }
 
@@ -63,7 +66,7 @@ void	purge_intellectuals(t_philo *philos)
 	t_fork		*forks;
 
 	i = 0;
-	forks = (*philos).left_fork;
+	forks = (*philos).first_fork;
 	while (i < num_philos)
 	{
 		if (pthread_mutex_destroy(forks + i) != 0)
