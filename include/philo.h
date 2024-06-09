@@ -6,7 +6,7 @@
 /*   By: sguzman <sguzman@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 14:53:59 by sguzman           #+#    #+#             */
-/*   Updated: 2024/06/08 16:49:26 by sguzman          ###   ########.fr       */
+/*   Updated: 2024/06/09 01:50:52 by sguzman          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ typedef struct s_table
 	int32_t				time_eat;
 	int32_t				time_sleep;
 	int32_t				num_must_eat;
-	int64_t				start_time;
+	time_t				start_time;
 	t_micro				micro;
 }						t_table;
 
@@ -58,13 +58,15 @@ typedef struct s_philo
 	t_table				*table;
 	t_fork				*first_fork;
 	t_fork				*second_fork;
+	time_t				last_meal;
+	int32_t				meal_count;
 }						t_philo;
 
 /* ************************************************************************** */
 /*                               Time-related Functions                      */
 /* ************************************************************************** */
 
-int64_t					now(void);
+time_t					now(void);
 
 void					ft_sleep(int64_t milliseconds);
 

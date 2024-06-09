@@ -6,7 +6,7 @@
 /*   By: sguzman <sguzman@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 15:02:14 by sguzman           #+#    #+#             */
-/*   Updated: 2024/06/08 16:49:31 by sguzman          ###   ########.fr       */
+/*   Updated: 2024/06/09 01:44:11 by sguzman          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ t_table	parse_arguments(int argc, char **argv)
 	if (argc < 5 || argc > 6)
 		internal_error("invalid number of arguments");
 	if (legal_number(*(argv + 1), &table.num_philos) == 0
-		|| table.num_philos <= 0)
+		|| table.num_philos <= 1)
 		parser_error("invalid number of philosophers: %s", *(argv + 1));
 	if (legal_number(*(argv + 2), &table.time_die) == 0 || table.time_die <= 0)
 		parser_error("invalid time to die: %s", *(argv + 2));

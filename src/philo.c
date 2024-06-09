@@ -6,7 +6,7 @@
 /*   By: sguzman <sguzman@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 14:55:55 by sguzman           #+#    #+#             */
-/*   Updated: 2024/06/08 16:56:52 by sguzman          ###   ########.fr       */
+/*   Updated: 2024/06/09 02:07:32 by sguzman          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ t_philo	*thinkers_assembly(t_table *table)
 					% num_philos) * (i & 1));
 		(*(philos + i)).second_fork = forks + (((i + 1) % num_philos) * (1
 					- (i & 1)) + i * (i & 1));
+		(*(philos + i)).meal_count = 0;
 		i++;
 	}
 	pthread_mutex_init(&(*table).micro, NULL);
