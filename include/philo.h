@@ -6,7 +6,7 @@
 /*   By: sguzman <sguzman@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 14:53:59 by sguzman           #+#    #+#             */
-/*   Updated: 2024/06/12 17:06:02 by sguzman          ###   ########.fr       */
+/*   Updated: 2024/06/12 18:02:14 by sguzman          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,8 @@ typedef struct s_table
 	int32_t				num_must_eat;
 	time_t				start_time;
 	t_mutex				log_lock;
+	t_mutex				dinner_lock;
+	t_thread			waiter_thread;
 }						t_table;
 
 /* ************************************************************************** */
@@ -68,7 +70,7 @@ typedef struct s_philo
 
 time_t					current_time(void);
 
-void					sleep_for(int64_t milliseconds);
+void					sleep_for(int64_t milliseconds, int8_t flag);
 
 /* ************************************************************************** */
 /*                              Parse Functions                               */

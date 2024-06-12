@@ -6,7 +6,7 @@
 /*   By: sguzman <sguzman@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 17:26:21 by sguzman           #+#    #+#             */
-/*   Updated: 2024/06/12 17:14:53 by sguzman          ###   ########.fr       */
+/*   Updated: 2024/06/12 18:06:27 by sguzman          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 
 void	log_state(const char *state, t_philo philo, t_table table)
 {
+	if (!table.dinner_served)
+		return ;
 	pthread_mutex_lock(&table.log_lock);
 	printf("%ld %d %s\n", current_time() - table.start_time, philo.id, state);
 	pthread_mutex_unlock(&table.log_lock);
@@ -27,7 +29,7 @@ void	dine(t_philo philo, t_table table)
 	log_state("has taken a fork", philo, table);
 	log_state("is eating", philo, table);
 	philo.last_meal = current_time();
-	sleep_for(table.time_eat);
+	sleep_for(table.time_eat, table.dinner_served);
 	philo.meal_count++;
 	pthread_mutex_unlock(philo.first_fork);
 	pthread_mutex_unlock(philo.second_fork);
@@ -36,7 +38,7 @@ void	dine(t_philo philo, t_table table)
 void	rest(t_philo philo, t_table table)
 {
 	log_state("is sleeping", philo, table);
-	sleep_for(table.time_sleep);
+	sleep_for(table.time_sleep, table.dinner_served);
 	log_state("is thinking", philo, table);
 }
 
