@@ -6,7 +6,7 @@
 /*   By: sguzman <sguzman@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 17:26:21 by sguzman           #+#    #+#             */
-/*   Updated: 2024/06/12 14:55:01 by sguzman          ###   ########.fr       */
+/*   Updated: 2024/06/12 17:14:53 by sguzman          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,12 +44,16 @@ void	*philosopher(void *arg)
 {
 	t_philo	philo;
 	t_table	table;
+	time_t	start_time;
 
 	philo = *(t_philo *)arg;
 	table = *philo.table;
-	while (current_time() < table.start_time)
+	start_time = table.start_time;
+	if (philo.id & 1)
+		start_time += table.time_eat;
+	while (current_time() < start_time)
 		continue ;
-	while (42)
+	while (table.dinner_served)
 	{
 		dine(philo, table);
 		rest(philo, table);

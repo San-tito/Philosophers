@@ -6,7 +6,7 @@
 /*   By: sguzman <sguzman@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 14:55:55 by sguzman           #+#    #+#             */
-/*   Updated: 2024/06/12 14:29:33 by sguzman          ###   ########.fr       */
+/*   Updated: 2024/06/12 17:04:29 by sguzman          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ t_philo	*initialize_philosophers(t_table *shared_table)
 		(*(philos + i)).second_fork = forks + (((i + 1) % num_philos) * (1
 					- (i & 1)) + i * (i & 1));
 		(*(philos + i)).meal_count = 0;
+		(*(philos + i)).last_meal = (*shared_table).start_time;
 		pthread_mutex_init(forks + i++, NULL);
 	}
 	pthread_mutex_init(&(*shared_table).log_lock, NULL);

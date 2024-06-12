@@ -6,7 +6,7 @@
 /*   By: sguzman <sguzman@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 14:53:59 by sguzman           #+#    #+#             */
-/*   Updated: 2024/06/12 14:28:32 by sguzman          ###   ########.fr       */
+/*   Updated: 2024/06/12 17:06:02 by sguzman          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ typedef pthread_mutex_t	t_mutex;
 
 typedef struct s_table
 {
+	int8_t				dinner_served;
 	int32_t				num_philos;
 	int32_t				time_die;
 	int32_t				time_eat;
