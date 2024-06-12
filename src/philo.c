@@ -6,39 +6,38 @@
 /*   By: sguzman <sguzman@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 14:55:55 by sguzman           #+#    #+#             */
-/*   Updated: 2024/06/09 02:07:32 by sguzman          ###   ########.fr       */
+/*   Updated: 2024/06/12 14:29:33 by sguzman          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-t_philo	*thinkers_assembly(t_table *table)
+t_philo	*initialize_philosophers(t_table *shared_table)
 {
 	int			i;
 	t_philo		*philos;
-	t_fork		*forks;
-	const int	num_philos = (*table).num_philos;
+	t_mutex		*forks;
+	const int	num_philos = (*shared_table).num_philos;
 
 	i = 0;
 	philos = xmalloc(num_philos * sizeof(t_philo));
-	forks = xmalloc(num_philos * sizeof(t_fork));
+	forks = xmalloc(num_philos * sizeof(t_mutex));
 	while (i < num_philos)
 	{
 		(*(philos + i)).id = i;
-		(*(philos + i)).table = table;
-		pthread_mutex_init(forks + i, NULL);
+		(*(philos + i)).table = shared_table;
 		(*(philos + i)).first_fork = forks + (i * (1 - (i & 1)) + ((i + 1)
 					% num_philos) * (i & 1));
 		(*(philos + i)).second_fork = forks + (((i + 1) % num_philos) * (1
 					- (i & 1)) + i * (i & 1));
 		(*(philos + i)).meal_count = 0;
-		i++;
+		pthread_mutex_init(forks + i++, NULL);
 	}
-	pthread_mutex_init(&(*table).micro, NULL);
+	pthread_mutex_init(&(*shared_table).log_lock, NULL);
 	return (philos);
 }
 
-void	gathering_of_sages(t_philo *philos)
+void	start_philosophers(t_philo *philos)
 {
 	int			i;
 	const int	num_philos = (*(*philos).table).num_philos;
@@ -51,6 +50,14 @@ void	gathering_of_sages(t_philo *philos)
 			fatal_error("Failed to create thread for philosopher %lu", i);
 		i++;
 	}
+}
+
+void	cleanup_resources(t_philo *philos)
+{
+	int			i;
+	const int	num_philos = (*(*philos).table).num_philos;
+	t_mutex		*forks;
+
 	i = 0;
 	while (i < num_philos)
 	{
@@ -58,14 +65,6 @@ void	gathering_of_sages(t_philo *philos)
 			fatal_error("Failed to join thread for philosopher %lu", i);
 		i++;
 	}
-}
-
-void	purge_intellectuals(t_philo *philos)
-{
-	int			i;
-	const int	num_philos = (*(*philos).table).num_philos;
-	t_fork		*forks;
-
 	i = 0;
 	forks = (*philos).first_fork;
 	while (i < num_philos)
@@ -80,12 +79,12 @@ void	purge_intellectuals(t_philo *philos)
 
 int	main(int argc, char **argv)
 {
-	t_table	table;
-	t_philo	*philos;
+	t_table	shared_table;
+	t_philo	*philosophers;
 
-	table = parse_arguments(argc, argv);
-	philos = thinkers_assembly(&table);
-	gathering_of_sages(philos);
-	purge_intellectuals(philos);
+	shared_table = parse_arguments(argc, argv);
+	philosophers = initialize_philosophers(&shared_table);
+	start_philosophers(philosophers);
+	cleanup_resources(philosophers);
 	return (0);
 }
