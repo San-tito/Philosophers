@@ -32,7 +32,9 @@ void	dine(t_philo *philo, t_table *table)
 	log_state("is eating", philo, table);
 	pthread_mutex_lock(&(*philo).meal_lock);
 	(*philo).last_meal = current_time();
+	pthread_mutex_unlock(&(*philo).meal_lock);
 	sleep_for((*table).time_eat, dinner_is_served(table));
+	pthread_mutex_lock(&(*philo).meal_lock);
 	(*philo).meal_count++;
 	pthread_mutex_unlock(&(*philo).meal_lock);
 	pthread_mutex_unlock((*philo).first_fork);

@@ -90,6 +90,8 @@ int	cleanup_resources(t_philo *philos, t_table *table)
 	}
 	if (pthread_mutex_destroy(&(*table).log_lock))
 		return (internal_error("Failed to destroy log lock"), 1);
+	if (pthread_mutex_destroy(&(*table).served_lock))
+		return (internal_error("Failed to destroy served lock"), 1);
 	return (xfree(forks), xfree(philos), 0);
 }
 
