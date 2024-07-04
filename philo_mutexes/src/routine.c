@@ -17,8 +17,10 @@ void	log_state(const char *state, t_philo *philo, t_table *table)
 	if (dinner_is_served(table))
 	{
 		pthread_mutex_lock(&(*table).log_lock);
-		printf("%ld %d %s\n", current_time() - (*table).start_time, (*philo).id,
-			state);
+		printf("%ld ", current_time() - (*table).start_time);
+		printf("%d ", (*philo).id);
+		printf("%s ", state);
+		printf("\n");
 		pthread_mutex_unlock(&(*table).log_lock);
 	}
 }
