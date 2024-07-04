@@ -98,6 +98,9 @@ void					*xmalloc(size_t bytes);
 /* ************************************************************************** */
 
 void					*philosopher(void *arg);
+void					*waiter(void *arg);
 int						dinner_is_served(t_table *table);
+void					log_state(const char *state, t_philo *philo,
+							t_table *table);
 
 #endif
