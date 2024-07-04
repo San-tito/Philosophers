@@ -51,6 +51,7 @@ DEPS_MAIN	= $(addprefix $(OBJS_PATH)/, ${MAIN:.c=.d})
 #                                 Makefile logic                               #
 ################################################################################
 
+SHELL = /bin/bash
 RED         	= \033[0;31m
 GREEN       	= \033[0;32m
 YELLOW      	= \033[0;33m
@@ -59,6 +60,18 @@ PURPLE      	= \033[0;35m
 CYAN        	= \033[0;36m
 RESET       	= \033[m
 
+define run
+    printf "%b%-46b" "$(BLUE)$(2) " "$(CYAN)$(@F)$(RESET)"; \
+    $(1) > /dev/null; \
+    RESULT=$$?; \
+    if [ $$RESULT -ne 0 ]; then \
+        printf "%b\n" "$(RED)[✗]$(RESET)"; \
+    else  \
+        printf "%b\n" "$(GREEN)[✓]$(RESET)"; \
+    fi; \
+    [ $$RESULT -eq 0 ]
+endef
+
 ################################################################################
 #                                 Makefile rules                               #
 ################################################################################
@@ -66,45 +79,42 @@ RESET       	= \033[m
 all: banner $(NAME) 
 
 banner:
-
 	@printf "%b" "$(PURPLE)"
 	@echo
-	@echo "                                                                              "
-	@echo "                                  ██████████                                  "
-	@echo "              ░░              ▓▓▓▓██████████▓▓▓▓                              "
-	@echo "                            ██████    ████████  ██                            "
-	@echo "                          ████████    ████████    ██                          "
-	@echo "                          ████████████████████    ██                          "
-	@echo "                        ████████████████████        ██                        "
-	@echo "                        ██████▓▓██████████          ██                        "
-	@echo "                        ████████████████            ██                        "
-	@echo "                        ██████████                  ██                        "
-	@echo "                        ████████                    ██                        "
-	@echo "                          ██████        ████      ██                          "
-	@echo "                          ██████        ████      ██                          "
-	@echo "                            ██████              ██                            "
-	@echo "                              ██████        ████                              "
-	@echo "                                  ██████████                                  "
+	@echo "                                          ░░░░░░░░░░▒▒░░░░░░░░  "
+	@echo "                                          ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒"
+	@echo "                                          ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒"
+	@echo "                                            ░░▒▒▒▒▒▒▒▒▒▒▒▒░░░░  "
+	@echo "                                              ▓▓▓▓▓▓▓▓▓▓▓▓▓▓░░  "
+	@echo "                                              ▒▒▒▒▓▓██▓▓▓▓▒▒    "
+	@echo "                                              ▓▓▓▓▓▓████▓▓▒▒    "
+	@echo "                                              ▓▓▓▓▓▓██▓▓▓▓▒▒    "
+	@echo "                                            ░░▓▓▓▓▓▓████▓▓▒▒    "
+	@echo "                                          ░░  ▓▓▓▓▓▓▓▓▓▓▓▓▓▓░░  "
+	@echo "                                              ▓▓▓▓▓▓▓▓▓▓▓▓▒▒    "
+	@echo "                                            ░░▒▒▓▓▓▓████▓▓▓▓    "
+	@echo "                                              ▓▓▓▓▓▓██▓▓▓▓▒▒    "
+	@echo "                                            ░░▓▓▓▓▓▓████▓▓▒▒    "
+	@echo "                                        ░░    ▓▓▓▓▓▓████▓▓▓▓    "
+	@echo "░░░░░░                                ░░  ░░▒▒▒▒▒▒░░▒▒░░░░░░    "
+	@echo "    ░░    ░░    ░░░░  ░░░░        ░░      ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒░░░░"
+	@echo "                                          ▒▒▒▒▒▒▒▒▒▒▒▒▓▓▒▒▒▒▒▒▒▒"
 	@echo
 	@printf "%b" "$(RESET)"
 
 -include $(DEPS) $(DEPS_MAIN)
 $(NAME):	$(OBJS) $(OBJS_MAIN)
-			@$(CC) $(CFLAGS) $(DFLAGS) -I $(INCLUDE_PATH) $^ -o $@ 
-			@printf "%b%-42s%-42b%-24s%b%s%b\n" "$(BLUE)" "Building program:" "$(CYAN)" $@ "$(GREEN)" "[✓]" "$(RESET)"
+			@$(call run, $(CC) $(CFLAGS) $(DFLAGS) -I $(INCLUDE_PATH) $^ -o $@, "Building")
 
 $(OBJS_PATH)/%.o: 	$(SRCS_PATH)/%.c $(HEADER) Makefile
 			@mkdir -p $(dir $@)
-			@$(CC) $(CFLAGS) $(DFLAGS) -c $< -o $@ -I $(INCLUDE_PATH)
-			@printf "%b%-42s%-42b%-24s%b%s%b\n" "$(BLUE)" "Compiling:" "$(CYAN)" $< "$(GREEN)" "[✓]" "$(RESET)"
+			@$(call run, $(CC) $(CFLAGS) $(DFLAGS) -c $< -o $@ -I $(INCLUDE_PATH), "Compiling")
 
 clean:		banner
-			@rm -rf $(OBJS_PATH)
-			@printf "%b%-42s%-42b%b%s%b\n" "$(BLUE)" "$@:" "$(CYAN)" "$(GREEN)" "[✓]" "$(RESET)"
+			@$(call run, rm -rf $(OBJS_PATH))
 
 fclean:		banner clean
-			@rm -rf $(NAME)
-			@printf "%b%-42s%-42b%b%s%b\n" "$(BLUE)" "$@:" "$(CYAN)" "$(GREEN)" "[✓]" "$(RESET)"
+			@$(call run, rm -rf $(NAME))
 
 re:			fclean all
 
