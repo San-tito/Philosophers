@@ -19,7 +19,6 @@ void	parser_error(const char *format, const char *arg)
 	printf("%s: ", ename);
 	printf(format, arg);
 	printf("\n");
-	exit(2);
 }
 
 void	internal_error(const char *format)
@@ -29,7 +28,6 @@ void	internal_error(const char *format)
 	printf("%s: ", ename);
 	printf("%s", format);
 	printf("\n");
-	exit(2);
 }
 
 void	fatal_error(const char *format, unsigned long arg)
@@ -39,5 +37,4 @@ void	fatal_error(const char *format, unsigned long arg)
 	printf("%s: ", ename);
 	printf(format, arg);
 	printf("\n");
-	exit(2);
 }

@@ -45,7 +45,7 @@ typedef struct s_table
 	int32_t				num_must_eat;
 	time_t				start_time;
 	t_mutex				log_lock;
-	t_mutex				dinner_lock;
+	t_mutex				served_lock;
 	t_thread			waiter_thread;
 }						t_table;
 
@@ -57,11 +57,12 @@ typedef struct s_philo
 {
 	int32_t				id;
 	t_thread			thread;
-	t_table				*table;
 	t_mutex				*first_fork;
 	t_mutex				*second_fork;
-	time_t				last_meal;
+	t_mutex				meal_lock;
 	int32_t				meal_count;
+	time_t				last_meal;
+	t_table				*table;
 }						t_philo;
 
 /* ************************************************************************** */
@@ -69,23 +70,20 @@ typedef struct s_philo
 /* ************************************************************************** */
 
 time_t					current_time(void);
-
 void					sleep_for(int64_t milliseconds, int8_t flag);
 
 /* ************************************************************************** */
 /*                              Parse Functions                               */
 /* ************************************************************************** */
 
-t_table					parse_arguments(int argc, char **argv);
+int						set_table(int argc, char **argv, t_table *table);
 
 /* ************************************************************************** */
 /*                             Error Handling                                 */
 /* ************************************************************************** */
 
 void					parser_error(const char *format, const char *arg);
-
 void					fatal_error(const char *format, unsigned long arg);
-
 void					internal_error(const char *format);
 
 /* ************************************************************************** */
@@ -93,7 +91,6 @@ void					internal_error(const char *format);
 /* ************************************************************************** */
 
 void					xfree(void *string);
-
 void					*xmalloc(size_t bytes);
 
 /* ************************************************************************** */
@@ -101,5 +98,6 @@ void					*xmalloc(size_t bytes);
 /* ************************************************************************** */
 
 void					*philosopher(void *arg);
+int						dinner_is_served(t_table *table);
 
 #endif

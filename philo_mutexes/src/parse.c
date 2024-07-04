@@ -77,29 +77,30 @@ static int	legal_number(const char *string, int *result)
 	return (0);
 }
 
-t_table	parse_arguments(int argc, char **argv)
+int	set_table(int argc, char **argv, t_table *table)
 {
-	t_table	table;
-
 	if (argc < 5 || argc > 6)
-		internal_error("invalid number of arguments");
-	if (legal_number(*(argv + 1), &table.num_philos) == 0
-		|| table.num_philos <= 1)
-		parser_error("invalid number of philosophers: %s", *(argv + 1));
-	if (legal_number(*(argv + 2), &table.time_die) == 0 || table.time_die <= 0)
-		parser_error("invalid time to die: %s", *(argv + 2));
-	if (legal_number(*(argv + 3), &table.time_eat) == 0 || table.time_eat <= 0)
-		parser_error("invalid time to eat: %s", *(argv + 3));
-	if (legal_number(*(argv + 4), &table.time_sleep) == 0
-		|| table.time_sleep <= 0)
-		parser_error("invalid time to sleep: %s", *(argv + 4));
-	if (argc == 6 && (legal_number(*(argv + 5), &table.num_must_eat) == 0
-			|| table.num_must_eat <= 0))
-		parser_error("invalid number of times each philosopher must eat: %s",
-			*(argv + 5));
+		return (internal_error("invalid number of arguments"), 1);
+	if (legal_number(*(argv + 1), &(*table).num_philos) == 0
+		|| (*table).num_philos <= 1)
+		return (parser_error("invalid number of philosophers: %s", *(argv + 1)),
+			1);
+	if (legal_number(*(argv + 2), &(*table).time_die) == 0
+		|| (*table).time_die <= 0)
+		return (parser_error("invalid time to die: %s", *(argv + 2)), 1);
+	if (legal_number(*(argv + 3), &(*table).time_eat) == 0
+		|| (*table).time_eat <= 0)
+		return (parser_error("invalid time to eat: %s", *(argv + 3)), 1);
+	if (legal_number(*(argv + 4), &(*table).time_sleep) == 0
+		|| (*table).time_sleep <= 0)
+		return (parser_error("invalid time to sleep: %s", *(argv + 4)), 1);
+	if (argc == 6 && (legal_number(*(argv + 5), &(*table).num_must_eat) == 0
+			|| (*table).num_must_eat <= 0))
+		return (parser_error("invalid time of each philosopher must eat: %s",
+				*(argv + 5)), 1);
 	else
-		table.num_must_eat = -1;
-	table.dinner_served = 1;
-	table.start_time = current_time() + (table.num_philos * 10);
-	return (table);
+		(*table).num_must_eat = 0;
+	(*table).dinner_served = 1;
+	(*table).start_time = current_time() + ((*table).num_philos * 10);
+	return (0);
 }
