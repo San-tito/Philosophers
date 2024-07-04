@@ -17,9 +17,9 @@ int	dinner_is_served(t_table *table)
 	int	served;
 
 	served = 0;
-	pthread_mutex_lock(&(*table).served_lock);
+	thread_mutex_control(&(*table).served_lock, LOCK);
 	served = (*table).dinner_served;
-	pthread_mutex_unlock(&(*table).served_lock);
+	thread_mutex_control(&(*table).served_lock, UNLOCK);
 	return (served);
 }
 
@@ -40,15 +40,15 @@ void	*waiter(void *arg)
 		i = 0;
 		while (i < (*table).num_philos)
 		{
-			pthread_mutex_lock(&(*(philo + i)).meal_lock);
+			thread_mutex_control(&(*(philo + i)).meal_lock, LOCK);
 			if (current_time() - (*(philo + i)).last_meal >= (*table).time_die)
 			{
 				log_state("died", philo + i, table);
-				pthread_mutex_lock(&(*table).served_lock);
+				thread_mutex_control(&(*table).served_lock, LOCK);
 				(*table).dinner_served = 0;
-				pthread_mutex_unlock(&(*table).served_lock);
+				thread_mutex_control(&(*table).served_lock, UNLOCK);
 			}
-			pthread_mutex_unlock(&(*(philo + i)).meal_lock);
+			thread_mutex_control(&(*(philo + i)).meal_lock, UNLOCK);
 		}
 		sleep_for((*table).time_die / 2, dinner_is_served(table));
 	}

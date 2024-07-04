@@ -16,31 +16,31 @@ void	log_state(const char *state, t_philo *philo, t_table *table)
 {
 	if (dinner_is_served(table))
 	{
-		pthread_mutex_lock(&(*table).log_lock);
+		thread_mutex_control(&(*table).log_lock, LOCK);
 		printf("%ld ", current_time() - (*table).start_time);
 		printf("%d ", (*philo).id);
 		printf("%s ", state);
 		printf("\n");
-		pthread_mutex_unlock(&(*table).log_lock);
+		thread_mutex_control(&(*table).log_lock, UNLOCK);
 	}
 }
 
 void	dine(t_philo *philo, t_table *table)
 {
-	pthread_mutex_lock((*philo).first_fork);
+	thread_mutex_control((*philo).first_fork, LOCK);
 	log_state("has taken a fork", philo, table);
-	pthread_mutex_lock((*philo).second_fork);
+	thread_mutex_control((*philo).second_fork, LOCK);
 	log_state("has taken a fork", philo, table);
 	log_state("is eating", philo, table);
-	pthread_mutex_lock(&(*philo).meal_lock);
+	thread_mutex_control(&(*philo).meal_lock, LOCK);
 	(*philo).last_meal = current_time();
-	pthread_mutex_unlock(&(*philo).meal_lock);
+	thread_mutex_control(&(*philo).meal_lock, UNLOCK);
 	sleep_for((*table).time_eat, dinner_is_served(table));
-	pthread_mutex_lock(&(*philo).meal_lock);
+	thread_mutex_control(&(*philo).meal_lock, LOCK);
 	(*philo).meal_count++;
-	pthread_mutex_unlock(&(*philo).meal_lock);
-	pthread_mutex_unlock((*philo).first_fork);
-	pthread_mutex_unlock((*philo).second_fork);
+	thread_mutex_control(&(*philo).meal_lock, UNLOCK);
+	thread_mutex_control((*philo).first_fork, UNLOCK);
+	thread_mutex_control((*philo).second_fork, UNLOCK);
 }
 
 void	rest(t_philo *philo, t_table *table)

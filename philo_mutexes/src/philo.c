@@ -20,9 +20,7 @@ int	init_philos(t_table *table, t_philo *philos)
 
 	i = 0;
 	forks = xmalloc(num_philos * sizeof(t_mutex));
-	if (forks == 0)
-		return (1);
-	while (i < num_philos)
+	while (i < num_philos && forks)
 	{
 		(*(philos + i)).id = i;
 		(*(philos + i)).table = table;
@@ -32,15 +30,13 @@ int	init_philos(t_table *table, t_philo *philos)
 					- (i & 1)) + i * (i & 1));
 		(*(philos + i)).meal_count = 0;
 		(*(philos + i)).last_meal = (*table).start_time;
-		if (pthread_mutex_init(&(*(philos + i)).meal_lock, NULL))
-			return (internal_error("Failed to meal lock %lu"), 1);
-		if (pthread_mutex_init(forks + i++, NULL))
-			return (fatal_error("Failed to init fork %lu", i), 1);
+		if (thread_mutex_init(&(*(philos + i)).meal_lock)
+			|| thread_mutex_init(forks + i++))
+			return (1);
 	}
-	if (pthread_mutex_init(&(*table).served_lock, NULL))
-		return (internal_error("Failed to init served lock;"), 1);
-	if (pthread_mutex_init(&(*table).log_lock, NULL))
-		return (internal_error("Failed to init log lock"), 1);
+	if (forks == 0 || thread_mutex_init(&(*table).served_lock)
+		|| thread_mutex_init(&(*table).log_lock))
+		return (1);
 	return (0);
 }
 
@@ -52,14 +48,12 @@ int	start_dinner(t_philo *philos, t_table *table)
 	i = 0;
 	while (i < num_philos)
 	{
-		if (pthread_create(&((*(philos + i)).thread), NULL, philosopher, philos
-				+ i))
-			return (fatal_error("Failed to create thread for philosopher %lu",
-					i), 1);
+		if (thread_create(&((*(philos + i)).thread), philosopher, philos + i))
+			return (1);
 		i++;
 	}
-	if (pthread_create(&(*table).waiter_thread, NULL, waiter, philos) != 0)
-		internal_error("Failed to create waiter thread");
+	if (thread_create(&(*table).waiter_thread, waiter, philos))
+		return (1);
 	return (0);
 }
 
@@ -72,26 +66,23 @@ int	cleanup_resources(t_philo *philos, t_table *table)
 	i = 0;
 	while (i < num_philos)
 	{
-		if (pthread_join((*(philos + i)).thread, NULL))
-			return (fatal_error("Failed to join thread for philosopher %lu", i),
-				1);
+		if (thread_join((*(philos + i)).thread))
+			return (1);
 		i++;
 	}
-	if (pthread_join((*table).waiter_thread, NULL) != 0)
-		internal_error("Failed to join waiter thread");
+	if (thread_join((*table).waiter_thread) != 0)
+		return (1);
 	i = 0;
 	forks = (*philos).first_fork;
 	while (i < num_philos)
 	{
-		if (pthread_mutex_destroy(forks + i))
-			return (fatal_error("Failed to destroy fork of philosopher %lu", i),
-				1);
+		if (thread_mutex_destroy(forks + i))
+			return (1);
 		i++;
 	}
-	if (pthread_mutex_destroy(&(*table).log_lock))
-		return (internal_error("Failed to destroy log lock"), 1);
-	if (pthread_mutex_destroy(&(*table).served_lock))
-		return (internal_error("Failed to destroy served lock"), 1);
+	if (thread_mutex_destroy(&(*table).log_lock)
+		|| thread_mutex_destroy(&(*table).served_lock))
+		return (1);
 	return (xfree(forks), xfree(philos), 0);
 }
 

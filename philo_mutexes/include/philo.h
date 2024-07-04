@@ -25,11 +25,25 @@
 # define PROGRAM "philo"
 
 /* ************************************************************************** */
-/*                              Thread and Mutex Types                        */
+/*                              Thread and Mutex                              */
 /* ************************************************************************** */
 
 typedef pthread_t		t_thread;
 typedef pthread_mutex_t	t_mutex;
+
+typedef enum e_mutex_action
+{
+	LOCK,
+	UNLOCK
+}						t_mutex_action;
+
+int						thread_mutex_init(t_mutex *mutexp);
+int						thread_mutex_control(t_mutex *mutexp,
+							t_mutex_action action);
+int						thread_mutex_destroy(t_mutex *mutexp);
+int						thread_create(t_thread *threadp,
+							void *(*start_routine)(void *), void *arg);
+int						thread_join(t_thread thread);
 
 /* ************************************************************************** */
 /*                              Table Structure                               */
