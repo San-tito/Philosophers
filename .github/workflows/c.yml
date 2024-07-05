@@ -13,13 +13,14 @@ jobs:
     
     steps:
     - uses: actions/checkout@v3
-    
-    - name: Update submodules
-      run: git submodule update --init --recursive
       
-    - name: Install dependencies
+    - name: check philo_mutexes
     
-      run: make
+      run: make -C philo_mutexes
+
+    - name: check philo_semaphores
+    
+      run: make -C philo_semaphores
 
   norminette:
   
