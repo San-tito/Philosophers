@@ -101,6 +101,5 @@ int	set_table(int argc, char **argv, t_table *table)
 	else
 		(*table).num_must_eat = 0;
 	(*table).dinner_served = 1;
-	(*table).start_time = current_time() + ((*table).num_philos * 10);
 	return (0);
 }

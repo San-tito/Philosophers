@@ -20,11 +20,11 @@ time_t	current_time(void)
 	return (tv.tv_sec * 1000 + tv.tv_usec / 1000);
 }
 
-void	sleep_for(int64_t milliseconds, int8_t flag)
+void	sleep_for(int64_t milliseconds, t_table *table)
 {
 	time_t	end_time;
 
 	end_time = current_time() + milliseconds;
-	while (current_time() < end_time && flag)
-		usleep(1000);
+	while (current_time() < end_time && dinner_is_served(table))
+		usleep(100);
 }

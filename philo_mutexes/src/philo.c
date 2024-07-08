@@ -29,7 +29,6 @@ int	init_philos(t_table *table, t_philo *philos)
 		(*(philos + i)).second_fork = forks + (((i + 1) % num_philos) * (1
 					- (i & 1)) + i * (i & 1));
 		(*(philos + i)).meal_count = 0;
-		(*(philos + i)).last_meal = (*table).start_time;
 		if (thread_mutex_init(&(*(philos + i)).meal_lock)
 			|| thread_mutex_init(forks + i++))
 			return (1);
@@ -46,6 +45,7 @@ int	start_dinner(t_philo *philos, t_table *table)
 	const int	num_philos = (*table).num_philos;
 
 	i = 0;
+	(*table).start_time = current_time() + ((*table).num_philos * 20);
 	while (i < num_philos)
 	{
 		if (thread_create(&((*(philos + i)).thread), philosopher, philos + i))

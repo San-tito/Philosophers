@@ -84,7 +84,7 @@ typedef struct s_philo
 /* ************************************************************************** */
 
 time_t					current_time(void);
-void					sleep_for(int64_t milliseconds, int8_t flag);
+void					sleep_for(int64_t milliseconds, t_table *table);
 
 /* ************************************************************************** */
 /*                              Parse Functions                               */
@@ -113,6 +113,7 @@ void					*xmalloc(size_t bytes);
 
 void					*philosopher(void *arg);
 void					*waiter(void *arg);
+void					spinlock(time_t start_time);
 int						dinner_is_served(t_table *table);
 void					log_state(const char *state, t_philo *philo,
 							t_table *table);
