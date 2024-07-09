@@ -28,3 +28,9 @@ void	sleep_for(int64_t milliseconds, t_table *table)
 	while (current_time() < end_time && dinner_is_served(table))
 		usleep(100);
 }
+
+void	spinlock(time_t start_time)
+{
+	while (current_time() < start_time)
+		continue ;
+}

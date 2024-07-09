@@ -12,16 +12,10 @@
 
 #include "philo.h"
 
-void	spinlock(time_t start_time)
-{
-	while (current_time() < start_time)
-		continue ;
-}
-
 void	log_state(const char *state, t_philo *philo, t_table *table)
 {
 	thread_mutex_control(&(*table).log_lock, LOCK);
-	if (dinner_is_served(table))
+	if (*state == 'd' || dinner_is_served(table))
 	{
 		printf("%ld ", current_time() - (*table).start_time);
 		printf("%d ", (*philo).id);
@@ -40,11 +34,9 @@ void	dine(t_philo *philo, t_table *table)
 	log_state("is eating", philo, table);
 	thread_mutex_control(&(*philo).meal_lock, LOCK);
 	(*philo).last_meal = current_time();
-	thread_mutex_control(&(*philo).meal_lock, UNLOCK);
-	sleep_for((*table).time_eat, table);
-	thread_mutex_control(&(*philo).meal_lock, LOCK);
 	(*philo).meal_count++;
 	thread_mutex_control(&(*philo).meal_lock, UNLOCK);
+	sleep_for((*table).time_eat, table);
 	thread_mutex_control((*philo).first_fork, UNLOCK);
 	thread_mutex_control((*philo).second_fork, UNLOCK);
 }

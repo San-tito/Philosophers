@@ -115,5 +115,7 @@ void					*philosopher(void *arg);
 void					*waiter(void *arg);
 void					spinlock(time_t start_time);
 int						dinner_is_served(t_table *table);
+void					log_state(const char *state, t_philo *philo,
+							t_table *table);
 
 #endif

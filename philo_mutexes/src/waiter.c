@@ -12,16 +12,6 @@
 
 #include "philo.h"
 
-void	log_die(t_philo *philo, t_table *table)
-{
-	thread_mutex_control(&(*table).log_lock, LOCK);
-	printf("%ld ", current_time() - (*table).start_time);
-	printf("%d ", (*philo).id);
-	printf("%s ", "died");
-	printf("\n");
-	thread_mutex_control(&(*table).log_lock, UNLOCK);
-}
-
 void	set_served(t_table *table, int s)
 {
 	thread_mutex_control(&(*table).served_lock, LOCK);
@@ -40,7 +30,7 @@ int	dinner_is_served(t_table *table)
 	return (served);
 }
 
-int	is_thinker_dead(t_philo *philo, t_table *table, int *is_satiated)
+int	is_thinker_dead(t_philo *philo, t_table *table)
 {
 	time_t	time;
 	int		s;
@@ -48,14 +38,12 @@ int	is_thinker_dead(t_philo *philo, t_table *table, int *is_satiated)
 	s = 0;
 	thread_mutex_control(&(*philo).meal_lock, LOCK);
 	time = current_time();
-	if (time - (*philo).last_meal >= (*table).time_die)
+	if (time - (*philo).last_meal > (*table).time_die)
 	{
 		set_served(table, 0);
-		log_die(philo, table);
+		log_state("died", philo, table);
 		s++;
 	}
-	if ((*philo).meal_count < (*table).num_must_eat)
-		*is_satiated = 0;
 	thread_mutex_control(&(*philo).meal_lock, UNLOCK);
 	return (s);
 }
@@ -65,7 +53,6 @@ void	*waiter(void *arg)
 	t_philo	*philo;
 	t_table	*table;
 	int		i;
-	int		satiated_thinkers;
 
 	philo = (t_philo *)arg;
 	table = (*philo).table;
@@ -73,14 +60,14 @@ void	*waiter(void *arg)
 	while (dinner_is_served(table))
 	{
 		i = 0;
-		satiated_thinkers = 1;
 		while (i < (*table).num_philos)
 		{
-			if (is_thinker_dead(philo + i, table, &satiated_thinkers))
+			if (is_thinker_dead(philo + i, table))
 				break ;
+			i++;
+			// if (is_thinker_dead(philo + i, table, &satiated_thinkers))
+			//	break ;
 		}
-		if (satiated_thinkers)
-			set_served(table, 0);
 		usleep((*table).time_die >> 1);
 	}
 	return (0);
