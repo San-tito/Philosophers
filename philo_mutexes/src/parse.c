@@ -94,12 +94,12 @@ int	set_table(int argc, char **argv, t_table *table)
 	if (legal_number(*(argv + 4), &(*table).time_sleep) == 0
 		|| (*table).time_sleep <= 0)
 		return (parser_error("invalid time to sleep: %s", *(argv + 4)), 1);
-	if (argc == 6 && (legal_number(*(argv + 5), &(*table).num_must_eat) == 0
+	if (*(argv + 5) == 0)
+		(*table).num_must_eat = 0;
+	else if ((legal_number(*(argv + 5), &(*table).num_must_eat) == 0
 			|| (*table).num_must_eat <= 0))
 		return (parser_error("invalid time of each philosopher must eat: %s",
 				*(argv + 5)), 1);
-	else
-		(*table).num_must_eat = 0;
 	(*table).dinner_served = 1;
 	return (0);
 }
