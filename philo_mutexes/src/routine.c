@@ -36,9 +36,9 @@ void	dine(t_philo *philo, t_table *table)
 	(*philo).last_meal = current_time();
 	(*philo).meal_count++;
 	thread_mutex_control(&(*philo).meal_lock, UNLOCK);
-	sleep_for((*table).time_eat, table);
 	thread_mutex_control((*philo).first_fork, UNLOCK);
 	thread_mutex_control((*philo).second_fork, UNLOCK);
+	sleep_for((*table).time_eat, table);
 }
 
 void	rest(t_philo *philo, t_table *table)
