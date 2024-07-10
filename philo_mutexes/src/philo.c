@@ -48,12 +48,17 @@ int	start_dinner(t_philo *philos, t_table *table)
 	(*table).start_time = current_time() + ((*table).num_philos * 20);
 	while (i < num_philos)
 	{
+		(*(philos + i)).last_meal = (*table).start_time;
+		i++;
+	}
+	i = 0;
+	while (i < num_philos)
+	{
 		if (thread_create(&((*(philos + i)).thread), philosopher, philos + i))
 			return (1);
 		i++;
 	}
-	if (thread_create(&(*table).waiter_thread, waiter, philos))
-		return (1);
+	arbitrator(philos, table);
 	return (0);
 }
 
@@ -70,8 +75,6 @@ int	cleanup_resources(t_philo *philos, t_table *table)
 			return (1);
 		i++;
 	}
-	if (thread_join((*table).waiter_thread) != 0)
-		return (1);
 	i = 0;
 	forks = (*philos).first_fork;
 	while (i < num_philos)

@@ -16,7 +16,7 @@
 
 NAME		= philo 
 CC 		= cc
-CFLAGS		= -Wall -Wextra -Werror #-fsanitize=thread
+CFLAGS		= -Wall -Wextra -Werror -fsanitize=thread
 DFLAGS		= -MMD -MF $(@:.o=.d)
 
 ################################################################################
@@ -31,7 +31,7 @@ INCLUDE_PATH	= ./include
 
 HEADER		= $(INCLUDE_PATH)/philo.h
 
-SRCS 		= error.c parse.c routine.c thread.c time.c waiter.c xmalloc.c
+SRCS 		= arbitrator.c error.c parse.c routine.c thread.c time.c xmalloc.c
 
 MAIN 		= philo.c
 

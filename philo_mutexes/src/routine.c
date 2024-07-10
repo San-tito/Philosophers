@@ -36,9 +36,9 @@ void	dine(t_philo *philo, t_table *table)
 	(*philo).last_meal = current_time();
 	(*philo).meal_count++;
 	thread_mutex_control(&(*philo).meal_lock, UNLOCK);
+	sleep_for((*table).time_eat, table);
 	thread_mutex_control((*philo).first_fork, UNLOCK);
 	thread_mutex_control((*philo).second_fork, UNLOCK);
-	sleep_for((*table).time_eat, table);
 }
 
 void	rest(t_philo *philo, t_table *table)
@@ -48,6 +48,15 @@ void	rest(t_philo *philo, t_table *table)
 	log_state("is thinking", philo, table);
 }
 
+void	*dine_with_single_fork(t_philo *philo, t_table *table)
+{
+	thread_mutex_control((*philo).first_fork, LOCK);
+	log_state("has taken a fork", philo, table);
+	sleep_for((*table).time_die, table);
+	thread_mutex_control((*philo).first_fork, UNLOCK);
+	return (0);
+}
+
 void	*philosopher(void *arg)
 {
 	t_philo	*philo;
@@ -55,10 +64,9 @@ void	*philosopher(void *arg)
 
 	philo = (t_philo *)arg;
 	table = (*philo).table;
-	thread_mutex_control(&(*philo).meal_lock, LOCK);
-	(*philo).last_meal = (*table).start_time;
-	thread_mutex_control(&(*philo).meal_lock, UNLOCK);
 	spinlock((*table).start_time);
+	if ((*table).num_philos == 1)
+		return (dine_with_single_fork(philo, table));
 	if ((*philo).id & 1)
 		sleep_for(1, table);
 	while (dinner_is_served(table))

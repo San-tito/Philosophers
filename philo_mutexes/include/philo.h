@@ -60,7 +60,6 @@ typedef struct s_table
 	time_t				start_time;
 	t_mutex				log_lock;
 	t_mutex				served_lock;
-	t_thread			waiter_thread;
 }						t_table;
 
 /* ************************************************************************** */
@@ -85,6 +84,7 @@ typedef struct s_philo
 
 time_t					current_time(void);
 void					sleep_for(int64_t milliseconds, t_table *table);
+void					spinlock(time_t start_time);
 
 /* ************************************************************************** */
 /*                              Parse Functions                               */
@@ -112,8 +112,7 @@ void					*xmalloc(size_t bytes);
 /* ************************************************************************** */
 
 void					*philosopher(void *arg);
-void					*waiter(void *arg);
-void					spinlock(time_t start_time);
+void					arbitrator(t_philo *philo, t_table *table);
 int						dinner_is_served(t_table *table);
 void					log_state(const char *state, t_philo *philo,
 							t_table *table);

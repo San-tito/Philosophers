@@ -50,29 +50,24 @@ int	is_thinker_dead(t_philo *philo, t_table *table, int *is_satiated)
 	return (s);
 }
 
-void	*waiter(void *arg)
+void	arbitrator(t_philo *philo, t_table *table)
 {
-	t_philo	*philo;
-	t_table	*table;
-	int		i;
-	int		satiated_thinkers;
+	int	i;
+	int	satiated_thinkers;
 
-	philo = (t_philo *)arg;
-	table = (*philo).table;
 	spinlock((*table).start_time);
-	while (dinner_is_served(table))
+	while (42)
 	{
 		i = 0;
 		satiated_thinkers = 1;
 		while (i < (*table).num_philos)
 		{
 			if (is_thinker_dead(philo + i, table, &satiated_thinkers))
-				break ;
+				return ;
 			i++;
 		}
 		if ((*table).num_must_eat && satiated_thinkers)
-			set_served(table, 0);
+			return (set_served(table, 0));
 		usleep((*table).time_die >> 1);
 	}
-	return (0);
 }

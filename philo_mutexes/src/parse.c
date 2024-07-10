@@ -82,7 +82,7 @@ int	set_table(int argc, char **argv, t_table *table)
 	if (argc < 5 || argc > 6)
 		return (internal_error("invalid number of arguments"), 1);
 	if (legal_number(*(argv + 1), &(*table).num_philos) == 0
-		|| (*table).num_philos <= 1)
+		|| (*table).num_philos <= 0)
 		return (parser_error("invalid number of philosophers: %s", *(argv + 1)),
 			1);
 	if (legal_number(*(argv + 2), &(*table).time_die) == 0
