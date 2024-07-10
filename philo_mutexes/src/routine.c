@@ -27,8 +27,10 @@ void	log_state(const char *state, t_philo *philo, t_table *table)
 
 void	dine_with_single_fork(t_philo *philo, t_table *table)
 {
-	sleep_for((*table).time_die + (*table).time_eat + (*table).time_sleep,
-		table);
+	int64_t	time;
+
+	time = (*table).time_die + (*table).time_eat + (*table).time_sleep;
+	sleep_for(time, table);
 	thread_mutex_control((*philo).first_fork, UNLOCK);
 }
 
@@ -41,13 +43,13 @@ void	dine(t_philo *philo, t_table *table)
 	thread_mutex_control((*philo).second_fork, LOCK);
 	log_state("has taken a fork", philo, table);
 	log_state("is eating", philo, table);
+	sleep_for((*table).time_eat, table);
 	thread_mutex_control(&(*philo).meal_lock, LOCK);
 	(*philo).last_meal = current_time();
 	(*philo).meal_count++;
 	thread_mutex_control(&(*philo).meal_lock, UNLOCK);
-	sleep_for((*table).time_eat, table);
-	thread_mutex_control((*philo).first_fork, UNLOCK);
 	thread_mutex_control((*philo).second_fork, UNLOCK);
+	thread_mutex_control((*philo).first_fork, UNLOCK);
 }
 
 void	rest(t_philo *philo, t_table *table)
@@ -66,7 +68,7 @@ void	*philosopher(void *arg)
 	table = (*philo).table;
 	spinlock((*table).start_time);
 	if ((*philo).id & 1)
-		sleep_for(1, table);
+		sleep_for((*table).time_eat >> 1, table);
 	while (dinner_is_served(table))
 	{
 		dine(philo, table);
