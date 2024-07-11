@@ -6,7 +6,7 @@
 #    By: sguzman <sguzman@student.42barcelona.com>  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/05/21 14:46:46 by sguzman           #+#    #+#              #
-#    Updated: 2024/06/09 02:09:41 by sguzman          ###   ########.fr        #
+#    Updated: 2024/07/11 12:25:33 by santito          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,7 +16,7 @@
 
 NAME		= philo 
 CC 		= cc
-CFLAGS		= -Wall -Wextra -Werror -fsanitize=thread
+CFLAGS		= -Wall -Wextra -Werror #-fsanitize=thread
 DFLAGS		= -MMD -MF $(@:.o=.d)
 
 ################################################################################

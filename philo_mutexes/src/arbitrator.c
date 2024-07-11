@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   waiter.c                                           :+:      :+:    :+:   */
+/*   arbitrator.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sguzman <sguzman@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 15:02:14 by sguzman           #+#    #+#             */
-/*   Updated: 2024/06/12 17:07:02 by sguzman          ###   ########.fr       */
+/*   Updated: 2024/07/11 13:11:17 by santito          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ int	is_thinker_dead(t_philo *philo, t_table *table, int *is_satiated)
 	s = 0;
 	thread_mutex_control(&(*philo).meal_lock, LOCK);
 	time = current_time();
-	if (time - (*philo).last_meal > (*table).time_die)
+	if (time - (*philo).last_meal >= (*table).time_die)
 	{
 		set_served(table, 0);
 		log_state("died", philo, table);

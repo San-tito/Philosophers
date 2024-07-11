@@ -6,7 +6,7 @@
 /*   By: sguzman <sguzman@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 14:55:55 by sguzman           #+#    #+#             */
-/*   Updated: 2024/06/12 18:07:43 by sguzman          ###   ########.fr       */
+/*   Updated: 2024/07/11 12:35:01 by santito          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,10 +24,8 @@ int	init_philos(t_table *table, t_philo *philos)
 	{
 		(*(philos + i)).id = i;
 		(*(philos + i)).table = table;
-		(*(philos + i)).first_fork = forks + (i * (1 - (i & 1)) + ((i + 1)
-					% num_philos) * (i & 1));
-		(*(philos + i)).second_fork = forks + (((i + 1) % num_philos) * (1
-					- (i & 1)) + i * (i & 1));
+		(*(philos + i)).first_fork = forks + i;
+		(*(philos + i)).second_fork = forks + ((i + 1) % num_philos);
 		(*(philos + i)).meal_count = 0;
 		if (thread_mutex_init(&(*(philos + i)).meal_lock)
 			|| thread_mutex_init(forks + i++))
