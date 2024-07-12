@@ -29,6 +29,8 @@ t_philo	*init_philos(t_table *table)
 		(*(philos + i)).table = table;
 		(*(philos + i)).meal_count = 0;
 	}
+	(*table).log_sem = semaphore_init(SEM_LOG, 1);
+	(*table).served_sem = semaphore_init(SEM_SERVED, 1);
 	return (philos);
 }
 
@@ -45,6 +47,8 @@ void	start_dinner(t_philo *philos, t_table *table)
 	while (i < num_philos)
 	{
 		(*(philos + i)).pid = make_child();
+		if ((*(philos + i)).pid == 0)
+			philosopher(philos + i, table);
 		i++;
 	}
 }
@@ -61,8 +65,8 @@ void	cleanup_resources(t_philo *philos, t_table *table)
 		i++;
 	}
 	semaphore_destroy(SEM_FORKS, (*philos).forks);
-	semaphore_destroy(SEM_LOG, &(*table).log_sem);
-	semaphore_destroy(SEM_SERVED, &(*table).served_sem);
+	semaphore_destroy(SEM_LOG, (*table).log_sem);
+	semaphore_destroy(SEM_SERVED, (*table).served_sem);
 	xfree(philos);
 }
 

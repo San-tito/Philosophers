@@ -62,8 +62,8 @@ typedef struct s_table
 	int32_t		time_sleep;
 	int32_t		num_must_eat;
 	time_t		start_time;
-	t_sem		log_sem;
-	t_sem		served_sem;
+	t_sem		*log_sem;
+	t_sem		*served_sem;
 }				t_table;
 
 /* ************************************************************************** */
@@ -110,7 +110,7 @@ void			*xmalloc(size_t bytes);
 /* ************************************************************************** */
 /*                           Philosopher Process Routine                      */
 /* ************************************************************************** */
-void			*philosopher(void *arg);
+void			philosopher(t_philo *philo, t_table *table);
 int				dinner_is_served(t_table *table);
 
 #endif
