@@ -17,12 +17,15 @@ t_philo	*init_philos(t_table *table)
 	int			i;
 	const int	num_philos = (*table).num_philos;
 	t_philo		*philos;
+	t_sem		*forks;
 
 	i = 0;
 	philos = xmalloc((*table).num_philos * sizeof(t_philo));
+	forks = semaphore_init(SEM_FORKS, (*table).num_philos);
 	while (i < num_philos)
 	{
 		(*(philos + i)).id = i;
+		(*(philos + i)).forks = forks;
 		(*(philos + i)).table = table;
 		(*(philos + i)).meal_count = 0;
 	}
@@ -57,6 +60,9 @@ void	cleanup_resources(t_philo *philos, t_table *table)
 		waitchld((*(philos + i)).pid);
 		i++;
 	}
+	semaphore_destroy(SEM_FORKS, (*philos).forks);
+	semaphore_destroy(SEM_LOG, &(*table).log_sem);
+	semaphore_destroy(SEM_SERVED, &(*table).served_sem);
 	xfree(philos);
 }
 

@@ -31,7 +31,7 @@ INCLUDE_PATH	= ./include
 
 HEADER		= $(INCLUDE_PATH)/philo.h
 
-SRCS 		= arbitrator.c error.c parse.c process.c routine.c time.c xmalloc.c
+SRCS 		= arbitrator.c error.c parse.c process.c routine.c sem.c time.c xmalloc.c
 
 MAIN 		= philo.c
 
