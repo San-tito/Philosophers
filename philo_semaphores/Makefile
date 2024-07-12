@@ -31,7 +31,7 @@ INCLUDE_PATH	= ./include
 
 HEADER		= $(INCLUDE_PATH)/philo.h
 
-SRCS 		= error.c parse.c routine.c time.c xmalloc.c
+SRCS 		= arbitrator.c error.c parse.c process.c routine.c time.c xmalloc.c
 
 MAIN 		= philo.c
 
@@ -62,10 +62,11 @@ RESET       	= \033[m
 
 define run
     printf "%b%-46b" "$(BLUE)$(2) " "$(CYAN)$(@F)$(RESET)"; \
-    $(1) > /dev/null; \
+    OUTPUT=$$($(1) 2>&1); \
     RESULT=$$?; \
     if [ $$RESULT -ne 0 ]; then \
         printf "%b\n" "$(RED)[✗]$(RESET)"; \
+	printf "%b\n" "$$OUTPUT"; \
     else  \
         printf "%b\n" "$(GREEN)[✓]$(RESET)"; \
     fi; \

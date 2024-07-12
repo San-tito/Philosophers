@@ -77,14 +77,14 @@ static int	legal_number(const char *string, int *result)
 	return (0);
 }
 
-t_table	parse_arguments(int argc, char **argv)
+t_table	set_table(int argc, char **argv)
 {
 	t_table	table;
 
 	if (argc < 5 || argc > 6)
 		internal_error("invalid number of arguments");
 	if (legal_number(*(argv + 1), &table.num_philos) == 0
-		|| table.num_philos <= 1)
+		|| table.num_philos <= 0)
 		parser_error("invalid number of philosophers: %s", *(argv + 1));
 	if (legal_number(*(argv + 2), &table.time_die) == 0 || table.time_die <= 0)
 		parser_error("invalid time to die: %s", *(argv + 2));
@@ -93,13 +93,12 @@ t_table	parse_arguments(int argc, char **argv)
 	if (legal_number(*(argv + 4), &table.time_sleep) == 0
 		|| table.time_sleep <= 0)
 		parser_error("invalid time to sleep: %s", *(argv + 4));
-	if (argc == 6 && (legal_number(*(argv + 5), &table.num_must_eat) == 0
+	if (*(argv + 5) == 0)
+		table.num_must_eat = 0;
+	else if ((legal_number(*(argv + 5), &table.num_must_eat) == 0
 			|| table.num_must_eat <= 0))
-		parser_error("invalid number of times each philosopher must eat: %s",
-			*(argv + 5));
-	else
-		table.num_must_eat = -1;
+		parser_error("invalid time of each philosopher must eat: %s", *(argv
+				+ 5));
 	table.dinner_served = 1;
-	table.start_time = current_time() + (table.num_philos * 10);
 	return (table);
 }

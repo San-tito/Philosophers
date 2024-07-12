@@ -1,36 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   time.c                                             :+:      :+:    :+:   */
+/*   arbitrator.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sguzman <sguzman@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/06/02 23:56:14 by sguzman           #+#    #+#             */
-/*   Updated: 2024/06/12 17:27:34 by sguzman          ###   ########.fr       */
+/*   Created: 2024/05/21 15:02:14 by sguzman           #+#    #+#             */
+/*   Updated: 2024/07/11 13:11:17 by santito          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-time_t	current_time(void)
+void	set_served(t_table *table, int s)
 {
-	struct timeval	tv;
-
-	gettimeofday(&tv, NULL);
-	return (tv.tv_sec * 1000 + tv.tv_usec / 1000);
+	(*table).dinner_served = s;
 }
 
-void	sleep_for(int64_t milliseconds, t_table *table)
+int	dinner_is_served(t_table *table)
 {
-	time_t	end_time;
+	int	served;
 
-	end_time = current_time() + milliseconds;
-	while (current_time() < end_time && dinner_is_served(table))
-		usleep(100);
-}
-
-void	spinlock(time_t start_time)
-{
-	while (current_time() < start_time)
-		continue ;
+	served = 0;
+	served = (*table).dinner_served;
+	return (served);
 }

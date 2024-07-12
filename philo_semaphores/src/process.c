@@ -1,36 +1,39 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   time.c                                             :+:      :+:    :+:   */
+/*   process.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sguzman <sguzman@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/06/02 23:56:14 by sguzman           #+#    #+#             */
-/*   Updated: 2024/06/12 17:27:34 by sguzman          ###   ########.fr       */
+/*   Created: 2024/05/27 17:26:21 by sguzman           #+#    #+#             */
+/*   Updated: 2024/06/12 18:06:27 by sguzman          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-time_t	current_time(void)
+pid_t	make_child(void)
 {
-	struct timeval	tv;
+	pid_t	pid;
 
-	gettimeofday(&tv, NULL);
-	return (tv.tv_sec * 1000 + tv.tv_usec / 1000);
+	pid = fork();
+	if (pid < 0)
+		internal_error("cannot create child process");
+	return (pid);
 }
 
-void	sleep_for(int64_t milliseconds, t_table *table)
+int	process_exit_status(int status)
 {
-	time_t	end_time;
-
-	end_time = current_time() + milliseconds;
-	while (current_time() < end_time && dinner_is_served(table))
-		usleep(100);
+	if (WIFSIGNALED(status))
+		return (128 + WTERMSIG(status));
+	else
+		return (WEXITSTATUS(status));
 }
 
-void	spinlock(time_t start_time)
+int	waitchld(pid_t pid)
 {
-	while (current_time() < start_time)
-		continue ;
+	int	status;
+
+	waitpid(pid, &status, WUNTRACED | WCONTINUED);
+	return (process_exit_status(status));
 }
