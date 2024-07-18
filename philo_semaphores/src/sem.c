@@ -6,7 +6,7 @@
 /*   By: sguzman <sguzman@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 17:26:21 by sguzman           #+#    #+#             */
-/*   Updated: 2024/06/12 18:06:27 by sguzman          ###   ########.fr       */
+/*   Updated: 2024/07/18 13:25:58 by santito          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,4 @@ void	semaphore_destroy(const char *name, t_sem *sem)
 {
 	if (sem_close(sem) < 0)
 		parser_error("cannot close semaphore %s", name);
-	if (sem_unlink(name) == -1)
-		parser_error("cannot unlink semaphore %s", name);
 }

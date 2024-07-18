@@ -6,7 +6,7 @@
 /*   By: sguzman <sguzman@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 14:53:59 by sguzman           #+#    #+#             */
-/*   Updated: 2024/06/12 18:02:14 by sguzman          ###   ########.fr       */
+/*   Updated: 2024/07/18 13:33:33 by santito          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,6 +111,8 @@ void			*xmalloc(size_t bytes);
 /*                           Philosopher Process Routine                      */
 /* ************************************************************************** */
 void			philosopher(t_philo *philo, t_table *table);
+void			arbitrator(t_philo *philo, t_table *table);
 int				dinner_is_served(t_table *table);
+void			log_state(const char *state, t_philo *philo, t_table *table);
 
 #endif

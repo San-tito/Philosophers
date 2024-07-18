@@ -6,7 +6,7 @@
 /*   By: sguzman <sguzman@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 14:55:55 by sguzman           #+#    #+#             */
-/*   Updated: 2024/06/12 18:07:43 by sguzman          ###   ########.fr       */
+/*   Updated: 2024/07/18 13:34:18 by santito          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,17 +20,18 @@ t_philo	*init_philos(t_table *table)
 	t_sem		*forks;
 
 	i = 0;
-	philos = xmalloc((*table).num_philos * sizeof(t_philo));
-	forks = semaphore_init(SEM_FORKS, (*table).num_philos);
+	philos = xmalloc(num_philos * sizeof(t_philo));
+	forks = semaphore_init(SEM_FORKS, num_philos);
+	(*table).log_sem = semaphore_init(SEM_LOG, 1);
+	(*table).served_sem = semaphore_init(SEM_SERVED, 1);
 	while (i < num_philos)
 	{
 		(*(philos + i)).id = i;
 		(*(philos + i)).forks = forks;
 		(*(philos + i)).table = table;
 		(*(philos + i)).meal_count = 0;
+		i++;
 	}
-	(*table).log_sem = semaphore_init(SEM_LOG, 1);
-	(*table).served_sem = semaphore_init(SEM_SERVED, 1);
 	return (philos);
 }
 
@@ -42,7 +43,10 @@ void	start_dinner(t_philo *philos, t_table *table)
 	i = 0;
 	(*table).start_time = current_time() + ((*table).num_philos * 20);
 	while (i < num_philos)
-		(*(philos + i++)).last_meal = (*table).start_time;
+	{
+		(*(philos + i)).last_meal = (*table).start_time;
+		i++;
+	}
 	i = 0;
 	while (i < num_philos)
 	{
@@ -51,6 +55,7 @@ void	start_dinner(t_philo *philos, t_table *table)
 			philosopher(philos + i, table);
 		i++;
 	}
+	arbitrator(philos, table);
 }
 
 void	cleanup_resources(t_philo *philos, t_table *table)
