@@ -6,7 +6,7 @@
 /*   By: sguzman <sguzman@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 14:53:59 by sguzman           #+#    #+#             */
-/*   Updated: 2024/07/18 13:33:33 by santito          ###   ########.fr       */
+/*   Updated: 2024/07/18 15:36:00 by santito          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,10 +30,6 @@
 /*                              Process and Semaphore                         */
 /* ************************************************************************** */
 
-# define SEM_FORKS "/forks"
-# define SEM_LOG "/log"
-# define SEM_SERVED "/served"
-
 typedef sem_t	t_sem;
 
 typedef enum e_sem_action
@@ -42,9 +38,9 @@ typedef enum e_sem_action
 	POST
 }				t_sem_action;
 
-t_sem			*semaphore_init(const char *name, unsigned int value);
+t_sem			*semaphore_init(t_sem *sem, unsigned int value);
 void			semaphore_control(t_sem *sem, t_sem_action action);
-void			semaphore_destroy(const char *name, t_sem *sem);
+void			semaphore_destroy(t_sem *sem);
 pid_t			make_child(void);
 int				waitchld(pid_t pid);
 int				process_exit_status(int status);
@@ -62,8 +58,8 @@ typedef struct s_table
 	int32_t		time_sleep;
 	int32_t		num_must_eat;
 	time_t		start_time;
-	t_sem		*log_sem;
-	t_sem		*served_sem;
+	t_sem		log_sem;
+	t_sem		served_sem;
 }				t_table;
 
 /* ************************************************************************** */
@@ -74,7 +70,9 @@ typedef struct s_philo
 {
 	int32_t		id;
 	pid_t		pid;
-	t_sem		*forks;
+	t_sem		*first_fork;
+	t_sem		*second_fork;
+	t_sem		meal_sem;
 	int32_t		meal_count;
 	time_t		last_meal;
 	t_table		*table;
