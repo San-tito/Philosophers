@@ -1,36 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   time.c                                             :+:      :+:    :+:   */
+/*   thread.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sguzman <sguzman@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/06/02 23:56:14 by sguzman           #+#    #+#             */
-/*   Updated: 2024/07/19 17:12:45 by santito          ###   ########.fr       */
+/*   Created: 2024/05/27 17:26:21 by sguzman           #+#    #+#             */
+/*   Updated: 2024/07/19 17:44:48 by santito          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-time_t	current_time(void)
+void	thread_create(t_thread *threadp, void *(*start_routine)(void *),
+		void *arg)
 {
-	struct timeval	tv;
-
-	gettimeofday(&tv, NULL);
-	return (tv.tv_sec * 1000 + tv.tv_usec / 1000);
+	if (pthread_create(threadp, NULL, start_routine, arg))
+		fatal_error("cannot create %lu thread", (unsigned long)threadp);
 }
 
-void	sleep_for(int64_t milliseconds, t_table *table)
+void	thread_detach(t_thread thread)
 {
-	time_t	end_time;
-
-	end_time = current_time() + milliseconds;
-	while (current_time() < end_time && dinner_is_served(table))
-		usleep(100);
-}
-
-void	spinlock(time_t start_time)
-{
-	while (current_time() < start_time)
-		continue ;
+	if (pthread_detach(thread))
+		fatal_error("cannot detach %lu thread", (unsigned long)thread);
 }

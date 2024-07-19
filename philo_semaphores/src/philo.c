@@ -6,7 +6,7 @@
 /*   By: sguzman <sguzman@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 14:55:55 by sguzman           #+#    #+#             */
-/*   Updated: 2024/07/19 16:06:39 by santito          ###   ########.fr       */
+/*   Updated: 2024/07/19 18:03:03 by santito          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,6 @@ void	start_dinner(t_philo *philos, t_table *table)
 			philosopher(philos + i, table);
 		i++;
 	}
-	arbitrator(philos, table);
 }
 
 void	cleanup_resources(t_philo *philos, t_table *table)
