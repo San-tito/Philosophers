@@ -6,7 +6,7 @@
 /*   By: sguzman <sguzman@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 14:55:55 by sguzman           #+#    #+#             */
-/*   Updated: 2024/07/11 12:35:01 by santito          ###   ########.fr       */
+/*   Updated: 2024/07/19 16:05:10 by santito          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,8 @@ int	cleanup_resources(t_philo *philos, t_table *table)
 	forks = (*philos).first_fork;
 	while (i < num_philos)
 	{
-		if (thread_mutex_destroy(forks + i))
+		if (thread_mutex_destroy(forks + i) || thread_mutex_destroy(&(*(philos
+						+ i)).meal_lock))
 			return (1);
 		i++;
 	}

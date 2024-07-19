@@ -6,7 +6,7 @@
 /*   By: sguzman <sguzman@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 17:26:21 by sguzman           #+#    #+#             */
-/*   Updated: 2024/07/18 14:01:57 by santito          ###   ########.fr       */
+/*   Updated: 2024/07/18 16:35:47 by santito          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 t_sem	*semaphore_init(t_sem *sem, unsigned int value)
 {
-	if (sem_init(sem, 0, value))
+	if (sem_init(sem, 1, value))
 		fatal_error("cannot initialize semaphore %lu", (unsigned long)sem);
 	return (sem);
 }

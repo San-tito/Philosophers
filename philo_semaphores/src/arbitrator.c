@@ -6,48 +6,40 @@
 /*   By: sguzman <sguzman@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 15:02:14 by sguzman           #+#    #+#             */
-/*   Updated: 2024/07/18 15:46:12 by santito          ###   ########.fr       */
+/*   Updated: 2024/07/19 16:00:38 by santito          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-void	set_served(t_table *table, int s)
+void	kill_thinkers(t_philo *philos, t_table *table)
 {
-	semaphore_control(&(*table).served_sem, WAIT);
-	(*table).dinner_served = s;
-	semaphore_control(&(*table).served_sem, POST);
-}
+	int			i;
+	const int	num_philos = (*table).num_philos;
 
-int	dinner_is_served(t_table *table)
-{
-	int	served;
-
-	served = 0;
-	semaphore_control(&(*table).served_sem, WAIT);
-	served = (*table).dinner_served;
-	semaphore_control(&(*table).served_sem, POST);
-	return (served);
+	i = 0;
+	while (i < num_philos)
+	{
+		kill((*(philos + i)).pid, SIGKILL);
+		i++;
+	}
 }
 
 int	is_thinker_dead(t_philo *philo, t_table *table, int *is_satiated)
 {
 	time_t	time;
-	int		s;
 
-	s = 0;
 	semaphore_control(&(*philo).meal_sem, WAIT);
 	time = current_time();
 	if (time - (*philo).last_meal >= (*table).time_die)
 	{
-		set_served(table, 0);
-		log_state("died", philo, table);
-		s++;
+		semaphore_control(&(*philo).meal_sem, POST);
+		return (1);
 	}
 	if ((*philo).meal_count < (*table).num_must_eat)
 		*is_satiated = 0;
 	semaphore_control(&(*philo).meal_sem, POST);
-	return (s);
+	return (0);
 }
 
 void	arbitrator(t_philo *philo, t_table *table)
@@ -63,11 +55,14 @@ void	arbitrator(t_philo *philo, t_table *table)
 		while (i < (*table).num_philos)
 		{
 			if (is_thinker_dead(philo + i, table, &satiated_thinkers))
-				return ;
+			{
+				log_state("died", philo + i, table);
+				return (kill_thinkers(philo, table));
+			}
 			i++;
 		}
 		if ((*table).num_must_eat && satiated_thinkers)
-			return (set_served(table, 0));
+			return (kill_thinkers(philo, table));
 		usleep((*table).time_die >> 1);
 	}
 }

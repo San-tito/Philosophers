@@ -6,7 +6,7 @@
 /*   By: sguzman <sguzman@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 14:55:55 by sguzman           #+#    #+#             */
-/*   Updated: 2024/07/18 15:59:23 by santito          ###   ########.fr       */
+/*   Updated: 2024/07/19 16:06:39 by santito          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,6 @@ t_philo	*init_philos(t_table *table)
 		i++;
 	}
 	semaphore_init(&(*table).log_sem, 1);
-	semaphore_init(&(*table).served_sem, 1);
 	return (philos);
 }
 
@@ -53,8 +52,10 @@ void	start_dinner(t_philo *philos, t_table *table)
 	i = 0;
 	while (i < num_philos)
 	{
-		(*(philos + i)).pid = make_child();
-		if ((*(philos + i)).pid == 0)
+		(*(philos + i)).pid = fork();
+		if ((*(philos + i)).pid < 0)
+			internal_error("cannot create child process");
+		else if ((*(philos + i)).pid == 0)
 			philosopher(philos + i, table);
 		i++;
 	}
@@ -72,10 +73,10 @@ void	cleanup_resources(t_philo *philos, t_table *table)
 	while (i < num_philos)
 	{
 		semaphore_destroy(forks + i);
+		semaphore_destroy(&(*(philos + i)).meal_sem);
 		i++;
 	}
 	semaphore_destroy(&(*table).log_sem);
-	semaphore_destroy(&(*table).served_sem);
 	xfree(forks);
 	xfree(philos);
 }

@@ -6,7 +6,7 @@
 /*   By: sguzman <sguzman@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 14:53:59 by sguzman           #+#    #+#             */
-/*   Updated: 2024/07/18 15:36:00 by santito          ###   ########.fr       */
+/*   Updated: 2024/07/19 16:07:41 by santito          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,9 +41,6 @@ typedef enum e_sem_action
 t_sem			*semaphore_init(t_sem *sem, unsigned int value);
 void			semaphore_control(t_sem *sem, t_sem_action action);
 void			semaphore_destroy(t_sem *sem);
-pid_t			make_child(void);
-int				waitchld(pid_t pid);
-int				process_exit_status(int status);
 
 /* ************************************************************************** */
 /*                              Table Structure                               */
@@ -59,7 +56,6 @@ typedef struct s_table
 	int32_t		num_must_eat;
 	time_t		start_time;
 	t_sem		log_sem;
-	t_sem		served_sem;
 }				t_table;
 
 /* ************************************************************************** */
@@ -83,7 +79,7 @@ typedef struct s_philo
 /* ************************************************************************** */
 
 time_t			current_time(void);
-void			sleep_for(int64_t milliseconds, t_table *table);
+void			sleep_for(int64_t milliseconds);
 void			spinlock(time_t start_time);
 
 /* ************************************************************************** */
@@ -110,7 +106,6 @@ void			*xmalloc(size_t bytes);
 /* ************************************************************************** */
 void			philosopher(t_philo *philo, t_table *table);
 void			arbitrator(t_philo *philo, t_table *table);
-int				dinner_is_served(t_table *table);
 void			log_state(const char *state, t_philo *philo, t_table *table);
 
 #endif
