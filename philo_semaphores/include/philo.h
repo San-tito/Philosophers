@@ -6,7 +6,7 @@
 /*   By: sguzman <sguzman@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 14:53:59 by sguzman           #+#    #+#             */
-/*   Updated: 2024/07/19 18:04:27 by santito          ###   ########.fr       */
+/*   Updated: 2024/07/19 18:27:36 by santito          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,6 @@ void				thread_detach(t_thread thread);
 
 typedef struct s_table
 {
-	int8_t			dinner_served;
 	int32_t			num_philos;
 	int32_t			time_die;
 	int32_t			time_eat;
@@ -87,7 +86,7 @@ typedef struct s_philo
 /* ************************************************************************** */
 
 time_t				current_time(void);
-void				sleep_for(int64_t milliseconds, t_table *table);
+void				sleep_for(int64_t milliseconds);
 void				spinlock(time_t start_time);
 
 /* ************************************************************************** */

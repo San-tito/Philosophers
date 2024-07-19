@@ -6,7 +6,7 @@
 /*   By: sguzman <sguzman@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 15:02:14 by sguzman           #+#    #+#             */
-/*   Updated: 2024/06/12 17:07:02 by sguzman          ###   ########.fr       */
+/*   Updated: 2024/07/19 18:17:00 by santito          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,6 +99,5 @@ t_table	set_table(int argc, char **argv)
 			|| table.num_must_eat <= 0))
 		parser_error("invalid time of each philosopher must eat: %s", *(argv
 				+ 5));
-	table.dinner_served = 1;
 	return (table);
 }

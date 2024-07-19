@@ -6,7 +6,7 @@
 /*   By: sguzman <sguzman@student.42barcelona.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 14:55:55 by sguzman           #+#    #+#             */
-/*   Updated: 2024/07/19 18:03:03 by santito          ###   ########.fr       */
+/*   Updated: 2024/07/19 18:27:25 by santito          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ t_philo	*init_philos(t_table *table)
 		semaphore_init(forks + i, 1);
 		i++;
 	}
+	semaphore_init(&(*table).served_sem, 0);
 	semaphore_init(&(*table).log_sem, 1);
 	return (philos);
 }
@@ -59,6 +60,7 @@ void	start_dinner(t_philo *philos, t_table *table)
 			philosopher(philos + i, table);
 		i++;
 	}
+	semaphore_control(&(*table).served_sem, WAIT);
 }
 
 void	cleanup_resources(t_philo *philos, t_table *table)
@@ -68,6 +70,13 @@ void	cleanup_resources(t_philo *philos, t_table *table)
 	t_sem		*forks;
 
 	i = 0;
+	while (i < num_philos)
+	{
+		kill((*(philos + i)).pid, SIGTERM);
+		waitpid((*(philos + i)).pid, 0, 0);
+		i++;
+	}
+	i = 0;
 	forks = (*philos).first_fork;
 	while (i < num_philos)
 	{
@@ -75,6 +84,7 @@ void	cleanup_resources(t_philo *philos, t_table *table)
 		semaphore_destroy(&(*(philos + i)).meal_sem);
 		i++;
 	}
+	semaphore_destroy(&(*table).served_sem);
 	semaphore_destroy(&(*table).log_sem);
 	xfree(forks);
 	xfree(philos);
