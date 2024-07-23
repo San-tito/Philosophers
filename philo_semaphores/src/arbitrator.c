@@ -12,22 +12,18 @@
 
 #include "philo.h"
 
-int	is_thinker_dead(t_philo *philo, t_table *table)
+void	is_thinker_dead(t_philo *philo, t_table *table)
 {
 	time_t	time;
-	int		s;
 
-	s = 0;
 	semaphore_control((*philo).meal_sem, WAIT);
 	time = current_time();
 	if (time - (*philo).last_meal >= (*table).time_die)
 	{
 		log_state("died", philo, table);
 		semaphore_control((*table).served_sem, POST);
-		s++;
 	}
 	semaphore_control((*philo).meal_sem, POST);
-	return (s);
 }
 
 void	*arbitrator(void *arg)
@@ -40,8 +36,7 @@ void	*arbitrator(void *arg)
 	spinlock((*table).start_time);
 	while (42)
 	{
-		if (is_thinker_dead(philo, table))
-			return (0);
+		is_thinker_dead(philo, table);
 		usleep((*table).time_die >> 1);
 	}
 	return (0);
