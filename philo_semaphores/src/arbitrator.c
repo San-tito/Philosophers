@@ -18,15 +18,14 @@ int	is_thinker_dead(t_philo *philo, t_table *table)
 	int		s;
 
 	s = 0;
-	semaphore_control(&(*philo).meal_sem, WAIT);
+	semaphore_control((*philo).meal_sem, WAIT);
 	time = current_time();
 	if (time - (*philo).last_meal >= (*table).time_die)
 	{
-		semaphore_control(&(*table).served_sem, POST);
 		log_state("died", philo, table);
 		s++;
 	}
-	semaphore_control(&(*philo).meal_sem, POST);
+	semaphore_control((*philo).meal_sem, POST);
 	return (s);
 }
 

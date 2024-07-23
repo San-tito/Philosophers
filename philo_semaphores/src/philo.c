@@ -12,6 +12,32 @@
 
 #include "philo.h"
 
+char	*generate_sem_name(int id)
+{
+	static char	sem_name[32] = SEM_MEAL;
+	const int	len = sizeof(SEM_MEAL) - 1;
+	int			i;
+	int			count;
+
+	i = id;
+	count = 0;
+	while (i > 0)
+	{
+		count++;
+		i /= 10;
+	}
+	if (id == 0)
+		count++;
+	i = len + count - 1;
+	while (i >= len)
+	{
+		*(sem_name + i) = '0' + (id % 10);
+		id /= 10;
+		i--;
+	}
+	return (sem_name);
+}
+
 t_philo	*init_philos(t_table *table)
 {
 	int			i;
@@ -21,20 +47,17 @@ t_philo	*init_philos(t_table *table)
 
 	i = 0;
 	philos = xmalloc(num_philos * sizeof(t_philo));
-	forks = xmalloc(num_philos * sizeof(t_sem));
+	forks = semaphore_init(SEM_FORKS, num_philos);
+	(*table).log_sem = semaphore_init(SEM_LOG, 1);
 	while (i < num_philos)
 	{
 		(*(philos + i)).id = i;
 		(*(philos + i)).table = table;
-		(*(philos + i)).first_fork = forks + i;
-		(*(philos + i)).second_fork = forks + ((i + 1) % num_philos);
+		(*(philos + i)).forks = forks;
 		(*(philos + i)).meal_count = 0;
-		semaphore_init(&(*(philos + i)).meal_sem, 1);
-		semaphore_init(forks + i, 1);
+		(*(philos + i)).meal_sem = semaphore_init(generate_sem_name(i), 1);
 		i++;
 	}
-	semaphore_init(&(*table).served_sem, 0);
-	semaphore_init(&(*table).log_sem, 1);
 	return (philos);
 }
 
@@ -60,33 +83,21 @@ void	start_dinner(t_philo *philos, t_table *table)
 			philosopher(philos + i, table);
 		i++;
 	}
-	semaphore_control(&(*table).served_sem, WAIT);
 }
 
 void	cleanup_resources(t_philo *philos, t_table *table)
 {
 	int			i;
 	const int	num_philos = (*table).num_philos;
-	t_sem		*forks;
 
 	i = 0;
 	while (i < num_philos)
 	{
-		kill((*(philos + i)).pid, SIGTERM);
-		waitpid((*(philos + i)).pid, 0, 0);
+		semaphore_destroy((*(philos + i)).meal_sem);
 		i++;
 	}
-	i = 0;
-	forks = (*philos).first_fork;
-	while (i < num_philos)
-	{
-		semaphore_destroy(forks + i);
-		semaphore_destroy(&(*(philos + i)).meal_sem);
-		i++;
-	}
-	semaphore_destroy(&(*table).served_sem);
-	semaphore_destroy(&(*table).log_sem);
-	xfree(forks);
+	semaphore_destroy((*philos).forks);
+	semaphore_destroy((*table).log_sem);
 	xfree(philos);
 }
 

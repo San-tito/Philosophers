@@ -39,7 +39,11 @@ typedef enum e_sem_action
 	POST
 }					t_sem_action;
 
-t_sem				*semaphore_init(t_sem *sem, unsigned int value);
+# define SEM_LOG "/sem_log"
+# define SEM_FORKS "/sem_forks"
+# define SEM_MEAL "/sem_meal_"
+
+t_sem				*semaphore_init(const char *name, unsigned int value);
 void				semaphore_control(t_sem *sem, t_sem_action action);
 void				semaphore_destroy(t_sem *sem);
 
@@ -61,8 +65,7 @@ typedef struct s_table
 	int32_t			time_sleep;
 	int32_t			num_must_eat;
 	time_t			start_time;
-	t_sem			served_sem;
-	t_sem			log_sem;
+	t_sem			*log_sem;
 }					t_table;
 
 /* ************************************************************************** */
@@ -73,9 +76,8 @@ typedef struct s_philo
 {
 	int32_t			id;
 	pid_t			pid;
-	t_sem			*first_fork;
-	t_sem			*second_fork;
-	t_sem			meal_sem;
+	t_sem			*forks;
+	t_sem			*meal_sem;
 	int32_t			meal_count;
 	time_t			last_meal;
 	t_table			*table;
