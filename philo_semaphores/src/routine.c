@@ -19,7 +19,8 @@ void	log_state(const char *state, t_philo *philo, t_table *table)
 	printf("%d ", (*philo).id);
 	printf("%s ", state);
 	printf("\n");
-	semaphore_control((*table).log_sem, POST);
+	if (*state != 'd')
+		semaphore_control((*table).log_sem, POST);
 }
 
 void	dine_with_single_fork(t_philo *philo, t_table *table)

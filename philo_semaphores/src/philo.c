@@ -49,6 +49,7 @@ t_philo	*init_philos(t_table *table)
 	philos = xmalloc(num_philos * sizeof(t_philo));
 	forks = semaphore_init(SEM_FORKS, num_philos);
 	(*table).log_sem = semaphore_init(SEM_LOG, 1);
+	(*table).served_sem = semaphore_init(SEM_SERVED, 0);
 	while (i < num_philos)
 	{
 		(*(philos + i)).id = i;
@@ -83,6 +84,7 @@ void	start_dinner(t_philo *philos, t_table *table)
 			philosopher(philos + i, table);
 		i++;
 	}
+	semaphore_control((*table).served_sem, WAIT);
 }
 
 void	cleanup_resources(t_philo *philos, t_table *table)
@@ -93,11 +95,18 @@ void	cleanup_resources(t_philo *philos, t_table *table)
 	i = 0;
 	while (i < num_philos)
 	{
+		kill((*(philos + i)).pid, SIGKILL);
+		i++;
+	}
+	i = 0;
+	while (i < num_philos)
+	{
 		semaphore_destroy((*(philos + i)).meal_sem);
 		i++;
 	}
 	semaphore_destroy((*philos).forks);
 	semaphore_destroy((*table).log_sem);
+	semaphore_destroy((*table).served_sem);
 	xfree(philos);
 }
 

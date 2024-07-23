@@ -41,6 +41,7 @@ typedef enum e_sem_action
 
 # define SEM_LOG "/sem_log"
 # define SEM_FORKS "/sem_forks"
+# define SEM_SERVED "/sem_served"
 # define SEM_MEAL "/sem_meal_"
 
 t_sem				*semaphore_init(const char *name, unsigned int value);
@@ -66,6 +67,7 @@ typedef struct s_table
 	int32_t			num_must_eat;
 	time_t			start_time;
 	t_sem			*log_sem;
+	t_sem			*served_sem;
 }					t_table;
 
 /* ************************************************************************** */
