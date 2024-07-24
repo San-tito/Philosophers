@@ -23,6 +23,8 @@ void	is_thinker_dead(t_philo *philo, t_table *table)
 		log_state("died", philo, table);
 		semaphore_control((*table).served_sem, POST);
 	}
+	if ((*table).num_must_eat && (*philo).meal_count >= (*table).num_must_eat)
+		semaphore_control((*table).served_sem, POST);
 	semaphore_control((*philo).meal_sem, POST);
 }
 
